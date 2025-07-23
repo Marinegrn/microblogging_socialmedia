@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { PrismaClient } from '@prisma/client';
+import 'dotenv/config';
 
 const app = express();
 const port = process.env.PORT || 3001;
