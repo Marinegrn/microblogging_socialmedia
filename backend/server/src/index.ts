@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3001;
 const prisma = new PrismaClient();
 
-// Middleware
+// Middlewares essentiels
 app.use(helmet());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
@@ -16,21 +16,16 @@ app.use(cors({
     : ['http://localhost:3000'],
   credentials: true
 }));
-app.use(morgan('combined'));
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+app.use(express.json());
 
-// Test route
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV 
-  });
+// Route simple pour test serveur
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', time: new Date().toISOString() });
 });
 
-// Test connexion DB
-app.get('/api/db-test', async (req, res) => {
+// Route test connexion base de données (optionnel)
+app.get('/db-test', async (req, res) => {
   try {
     await prisma.$connect();
     res.json({ status: 'Database connected successfully' });
@@ -40,26 +35,23 @@ app.get('/api/db-test', async (req, res) => {
   }
 });
 
-// Routes (à ajouter plus tard)
-// app.use('/api/auth', authRoutes);
-// app.use('/api/posts', postRoutes);
-
-// Error handling middleware
+// Middleware gestion d’erreur simple
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
+  res.status(500).json({ error: 'Internal server error' });
 });
 
-// 404 handler
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+// 404 - route non trouvée
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
 });
 
+// Démarrage serveur
 app.listen(port, () => {
   console.log(`🚀 Server running on http://localhost:${port}`);
 });
 
-// Graceful shutdown
+// Fermeture propre de Prisma à l’arrêt du serveur
 process.on('SIGINT', async () => {
   await prisma.$disconnect();
   process.exit();
