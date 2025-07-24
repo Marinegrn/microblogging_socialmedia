@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import { Loader2, Mail, Lock } from 'lucide-react';
+import {  Mail, Lock } from 'lucide-react';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
