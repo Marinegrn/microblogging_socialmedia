@@ -5,7 +5,6 @@ import { AuthRequest } from '../middleware/auth';
 
 const prisma = new PrismaClient();
 
-// Schémas de validation
 const createPostSchema = z.object({
   content: z.string()
     .min(1, 'Le contenu ne peut pas être vide')
@@ -19,11 +18,10 @@ const paginationSchema = z.object({
   }),
   limit: z.string().transform(val => {
     const num = parseInt(val);
-    return Number.isNaN(num) ? 10 : Math.min(Math.max(num, 1), 50); // Max 50 posts par page
+    return Number.isNaN(num) ? 10 : Math.min(Math.max(num, 1), 50);
   })
 });
 
-// Création de post
 export const createPost = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Authentification requise' });
@@ -37,17 +35,9 @@ export const createPost = async (req: AuthRequest, res: Response) => {
       },
       include: {
         author: {
-          select: { id: true, 
-            username: true, 
-            name: true, 
-            avatar: true 
-            }
+          select: { id: true, username: true, name: true, avatar: true }
         },
-        _count: { 
-            select: { 
-                likes: true 
-            } 
-        }
+        _count: { select: { likes: true } }
       }
     });
 
@@ -56,7 +46,7 @@ export const createPost = async (req: AuthRequest, res: Response) => {
       post: {
         ...post,
         likesCount: post._count.likes,
-        isLiked: false // Nouveau post, pas encore liké
+        isLiked: false
       }
     });
 
@@ -69,46 +59,28 @@ export const createPost = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// Récupération des posts
 export const getPosts = async (req: AuthRequest, res: Response) => {
   try {
     const { page, limit } = paginationSchema.parse(req.query);
     const skip = (page - 1) * limit;
 
-    // Récupérer les posts avec pagination
     const [posts, totalPosts] = await Promise.all([
       prisma.post.findMany({
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
         include: {
-          author: { 
-            select: { 
-                id: true, 
-                username: true, 
-                name: true, 
-                avatar: true 
-                } 
-            },
-          _count: { 
-            select: { 
-                likes: true 
-                } 
-            },
+          author: { select: { id: true, username: true, name: true, avatar: true } },
+          _count: { select: { likes: true } },
           likes: req.user ? {
-            where: { 
-                userId: req.user.id 
-                },
-            select: { 
-                id: true 
-                }
+            where: { userId: req.user.id },
+            select: { id: true }
           } : undefined
         }
       }),
       prisma.post.count()
     ]);
 
-    // Formater les posts avec les infos de like
     const formattedPosts = posts.map(post => ({
       id: post.id,
       content: post.content,
@@ -119,7 +91,6 @@ export const getPosts = async (req: AuthRequest, res: Response) => {
       isLiked: req.user ? ((post.likes as unknown as any[])?.length > 0) : false
     }));
 
-    // Calcul de la pagination
     const totalPages = Math.ceil(totalPosts / limit);
 
     res.json({
@@ -144,7 +115,6 @@ export const getPosts = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// Récupération des posts par ID
 export const getPostById = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -152,26 +122,11 @@ export const getPostById = async (req: AuthRequest, res: Response) => {
     const post = await prisma.post.findUnique({
       where: { id },
       include: {
-        author: { 
-            select: { 
-                id: true, 
-                username: true, 
-                name: true, 
-                avatar: true 
-                } 
-            },
-        _count: { 
-            select: { 
-                likes: true 
-            } 
-        },
+        author: { select: { id: true, username: true, name: true, avatar: true } },
+        _count: { select: { likes: true } },
         likes: req.user ? {
-          where: { 
-            userId: req.user.id 
-        },
-          select: { 
-            id: true 
-        }
+          where: { userId: req.user.id },
+          select: { id: true }
         } : undefined
       }
     });
@@ -196,20 +151,15 @@ export const getPostById = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// Suppression d'un post
 export const deletePost = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Authentification requise' });
 
     const { id } = req.params;
 
-    // Vérifier que le post existe et appartient à l'utilisateur.ice
     const post = await prisma.post.findUnique({
       where: { id },
-      select: { 
-        id: true, 
-        authorId: true 
-    }
+      select: { id: true, authorId: true }
     });
 
     if (!post) return res.status(404).json({ error: 'Post non trouvé' });
@@ -217,11 +167,7 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
       return res.status(403).json({ error: 'Vous ne pouvez supprimer que vos propres posts' });
     }
 
-    // Supprimer le post (les likes seront supprimés automatiquement via CASCADE)
-    await prisma.post.delete({ 
-        where: { 
-            id } 
-        });
+    await prisma.post.delete({ where: { id } });
     res.json({ message: 'Post supprimé avec succès' });
 
   } catch (error) {
@@ -230,7 +176,6 @@ export const deletePost = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// Récupéation des posts des utilisateur.ice.s
 export const getUserPosts = async (req: AuthRequest, res: Response) => {
   try {
     const { userId } = req.params;
@@ -239,44 +184,23 @@ export const getUserPosts = async (req: AuthRequest, res: Response) => {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      select: { id: true, 
-        username: true 
-    }
+      select: { id: true, username: true }
     });
 
     if (!user) return res.status(404).json({ error: 'Utilisateur non trouvé' });
 
     const [posts, totalPosts] = await Promise.all([
       prisma.post.findMany({
-        where: { 
-            authorId: userId 
-        },
+        where: { authorId: userId },
         skip,
         take: limit,
-        orderBy: { 
-            createdAt: 'desc' 
-        },
+        orderBy: { createdAt: 'desc' },
         include: {
-          author: { 
-            select: { 
-                id: true, 
-                username: true, 
-                name: true, 
-                avatar: true 
-                } 
-            },
-          _count: { 
-            select: { 
-                likes: true
-                } 
-            },
+          author: { select: { id: true, username: true, name: true, avatar: true } },
+          _count: { select: { likes: true } },
           likes: req.user ? {
-            where: { 
-                userId: req.user.id 
-            },
-            select: { 
-                id: true 
-            }
+            where: { userId: req.user.id },
+            select: { id: true }
           } : undefined
         }
       }),
@@ -315,3 +239,4 @@ export const getUserPosts = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ error: 'Erreur lors de la récupération des posts utilisateur' });
   }
 };
+

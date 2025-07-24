@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { createClient } from '@supabase/supabase-js';
-import { z, ZodError } from 'zod'; // Librairie de validations sécurisées de schémas en TS/JS
+import { z, ZodError } from 'zod';
 
 const prisma = new PrismaClient();
 const supabase = createClient(
@@ -21,7 +21,7 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Mot de passe requis')
 });
 
-// Inscription
+// ▶️ Register
 export const register = async (req: Request, res: Response) => {
   try {
     const { email, password, username } = registerSchema.parse(req.body);
@@ -71,7 +71,7 @@ export const register = async (req: Request, res: Response) => {
   }
 };
 
-// Connexion (login)
+// ▶️ Login
 export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = loginSchema.parse(req.body);
@@ -112,7 +112,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-// Déconnexion
+// ▶️ Logout
 export const logout = async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
@@ -129,7 +129,7 @@ export const logout = async (req: Request, res: Response) => {
   }
 };
 
-// Moi
+// ▶️ Me
 export const me = async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
@@ -176,3 +176,4 @@ export const me = async (req: Request, res: Response) => {
     res.status(500).json({ error: 'Erreur serveur' });
   }
 };
+
