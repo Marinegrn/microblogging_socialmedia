@@ -1,15 +1,19 @@
 import dotenv from 'dotenv';
 dotenv.config({ path: '../.env' });
-console.log('DATABASE_URL:', process.env.DATABASE_URL);
+console.log('DATABASE_URL:', process.env.DATABASE_URL); // revert / TEST -> DOUBLE OK ! 
 
 import express from 'express';
+
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { PrismaClient } from '@prisma/client';
 
+import authRoutes from './routes/auth';
+import postRoutes from './routes/posts';
 
 const app = express();
+
 const port = process.env.PORT || 3001;
 const prisma = new PrismaClient();
 
@@ -29,7 +33,7 @@ app.get('/health', (req, res) => {
   res.json({ status: 'OK', time: new Date().toISOString() });
 });
 
-// Route test connexion base de données (optionnel)
+// Route test connexion base de données : désactiver en prod ! 
 app.get('/db-test', async (req, res) => {
   try {
     await prisma.$connect();
@@ -39,6 +43,10 @@ app.get('/db-test', async (req, res) => {
     res.status(500).json({ error: 'Database connection failed' });
   }
 });
+
+// Routes 
+// app.use('/api/auth', authRoutes);
+// app.use('/api/posts', postRoutes);
 
 // Middleware gestion d’erreur simple
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
