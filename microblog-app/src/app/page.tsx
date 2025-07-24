@@ -8,9 +8,10 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
+    // TEST sans connexion pour vérifier le style de la page d'accueil
+    // if (!loading && !user) {
+    //   router.push('/login');
+    // }
   }, [user, loading, router]);
 
   if (loading) {
