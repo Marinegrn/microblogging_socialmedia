@@ -9,6 +9,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { PrismaClient } from '@prisma/client';
 
+// WIP -> GROS DEBUG
 import authRoutes from './routes/auth';
 import postRoutes from './routes/posts';
 
@@ -44,6 +45,7 @@ app.get('/db-test', async (req, res) => {
   }
 });
 
+// WIP -> GROS DEBUG
 // Routes 
 // app.use('/api/auth', authRoutes);
 // app.use('/api/posts', postRoutes);
