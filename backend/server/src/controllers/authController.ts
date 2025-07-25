@@ -1,13 +1,9 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { createClient } from '@supabase/supabase-js';
+import supabase from '../config/supabaseClient';
 import { z, ZodError } from 'zod';
 
 const prisma = new PrismaClient();
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // Schémas de validation
 const registerSchema = z.object({

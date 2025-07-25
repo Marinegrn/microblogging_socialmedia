@@ -1,12 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { createClient } from '@supabase/supabase-js';
+import  supabase  from '../config/supabaseClient';
+import { PrismaClient } from '@prisma/client';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
+export const prisma = new PrismaClient();
 export interface AuthRequest extends Request {
   user?: {
     id: string;

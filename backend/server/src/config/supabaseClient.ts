@@ -1,11 +1,11 @@
-import './dotenv'; // Charge .env AVANT createClient
+import './dotenv'; // ssure le chargement de .env AVANT
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is missing in .env');
-}
+export default supabase;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+

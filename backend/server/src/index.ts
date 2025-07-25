@@ -1,9 +1,7 @@
-import dotenv from 'dotenv';
-dotenv.config({ path: '../.env' });
-console.log('DATABASE_URL:', process.env.DATABASE_URL); // revert / TEST -> DOUBLE OK ! 
+import './config/dotenv'; // doit arriver avant les autres imports
+// console.log('DATABASE_URL:', process.env.DATABASE_URL); // revert / TEST -> DOUBLE OK ! 
 
 import express from 'express';
-
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -47,8 +45,8 @@ app.get('/db-test', async (req, res) => {
 
 // WIP -> GROS DEBUG
 // Routes 
-// app.use('/api/auth', authRoutes);
-// app.use('/api/posts', postRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/posts', postRoutes);
 
 // Middleware gestion d’erreur simple
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
