@@ -2,6 +2,12 @@
   "compilerOptions": {
     "target": "ES2020",                       // Version JS cible (Node moderne)
     "module": "commonjs",                     // Système de modules utilisé par Node.js
+    "baseUrl": ".",
+    "paths": {
+      "@shared/*": ["../../shared/*"]
+    },
+    "moduleResolution": "node",
+    "resolveJsonModule": true,                    
     "strict": true,                           // Active toutes les vérifications strictes TS
     "esModuleInterop": true,                  // Pour bien gérer les imports CommonJS/ESM
     "forceConsistentCasingInFileNames": true,// Pour éviter les erreurs liées à la casse
