@@ -1,4 +1,7 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
+import path from 'path';
+
+config({ path: path.resolve(__dirname, '../.env') });
 
 import { PrismaClient } from '@prisma/client';
 import seedUsers from './seeds/seedUsers';
