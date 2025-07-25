@@ -13,7 +13,9 @@
     "forceConsistentCasingInFileNames": true,// Pour éviter les erreurs liées à la casse
     "skipLibCheck": true,                     // Ignore les vérifications des types des dépendances
     "outDir": "dist",                         // Dossier de sortie en build (utile en prod)
-    "rootDir": "src"                          // Racine des fichiers sources TS
+    "rootDir": "src",    
+    "lib": ["ES2020"],                        //  Ajout des fonctionnalités modernes de VanillaJS
+    "types": ["node"]                          // Racine des fichiers sources TS
   },
   "include": ["src"],                         // Inclure tout le dossier src
   "exclude": ["node_modules", "dist"]        // Exclure node_modules et dist
