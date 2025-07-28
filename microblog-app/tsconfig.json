@@ -8,7 +8,8 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",          // BUG OK : change "bundler" → "node" pour résoudre les paths en dehors du dossier
+    "baseUrl": ".",                      // BUG OK : nécessaire pour que les paths fonctionnent
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -20,9 +21,11 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@shared/*": ["../shared/*"]
+      "@shared": ["../shared/index.ts"], // BUG OK : permet `import { X } from '@shared'`
+      "@shared/*": ["../shared/*"]       // BUG OK : permet `import { X } from '@shared/tatata'`
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
+
