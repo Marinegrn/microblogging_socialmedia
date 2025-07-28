@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+
 import Image from 'next/image';
 import type { User, Post, Like, Follow, TrendingTopic } from '@shared';
 import { Heart, MessageCircle, Repeat2, Share, Search, Bell, Mail, Bookmark, User, Home, Hash, MoreHorizontal, Edit3, TrendingUp, Users, Calendar, MapPin, ExternalLink, Verified } from 'lucide-react';
@@ -37,6 +38,7 @@ const MicroblogHomepage = () => {
           postsCount: 42
         });
 
+        // Test
         const mockPosts: Post[] = [
           {
             id: 'post-1',
@@ -48,8 +50,8 @@ const MicroblogHomepage = () => {
               id: 'user-2',
               email: 'marie@example.com',
               username: 'marie_dev',
-              name: 'Marie Developer',
-              avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face',
+              name: 'Marie Yamamoto',
+              avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=764&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
               createdAt: '2019-08-15T10:00:00Z',
               updatedAt: '2024-07-28T09:00:00Z',
               followersCount: 892,
@@ -98,7 +100,7 @@ const MicroblogHomepage = () => {
               id: 'user-4',
               email: 'sarah@example.com',
               username: 'sarah_design',
-              name: 'Sarah UI/UX',
+              name: 'Sarah Osei',
               avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
               createdAt: '2018-11-15T10:00:00Z',
               updatedAt: '2024-07-28T07:00:00Z',
@@ -112,8 +114,154 @@ const MicroblogHomepage = () => {
             ],
             likesCount: 156,
             isLikedByCurrentUser: false
-          }
-        ];
+          },
+          
+          {
+            id: 'post-4',
+            content: 'Le design thinking transforme la manière dont nous créons des expériences utilisateurs. 🚀',
+            authorId: 'user-5',
+            createdAt: '2024-07-20T11:00:00Z',
+            updatedAt: '2024-07-20T11:00:00Z',
+            author: {
+              id: 'user-5',
+              email: 'emma@example.com',
+              username: 'emma_codes',
+              name: 'Emma Diakité',
+              avatar: 'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=150&h=150&fit=crop&crop=face',
+              createdAt: '2021-01-10T08:00:00Z',
+              updatedAt: '2025-07-28T10:00:00Z',
+              followersCount: 1540,
+              followingCount: 321,
+              postsCount: 78
+              },
+            likes: [
+              { id: 'like-5', userId: 'user-1', postId: 'post-4' },
+              { id: 'like-6', userId: 'user-3', postId: 'post-4' }
+            ],
+            likesCount: 52,
+            isLikedByCurrentUser: false
+          },
+          {
+            id: 'post-5',
+            content: 'La collaboration est la clé pour créer des projets innovants et durables. 🤝',
+            authorId: 'user-6',
+            createdAt: '2024-07-22T14:30:00Z',
+            updatedAt: '2024-07-22T14:30:00Z',
+            author: {
+              id: 'user-6',
+              email: 'liam@example.com',
+              username: 'liam_design',
+              name: 'Liam Ivanov',
+              avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?w=150&h=150&fit=crop&crop=face',
+              createdAt: '2022-05-12T11:00:00Z',
+              updatedAt: '2025-07-27T14:30:00Z',
+              followersCount: 879,
+              followingCount: 189,
+              postsCount: 45
+              },
+            likes: [
+              { id: 'like-7', userId: 'user-2', postId: 'post-5' }
+            ],
+            likesCount: 12,
+            isLikedByCurrentUser: false
+          },
+          {
+            id: 'post-6',
+            content: 'JavaScript est devenu le langage universel du web. Chaque jour, il continue d’évoluer !',
+            authorId: 'user-7',
+            createdAt: '2024-07-25T16:00:00Z',
+            updatedAt: '2024-07-25T16:00:00Z',
+            author: {
+              id: 'user-7',
+              email: 'sofia@example.com',
+              username: 'sofia_ui',
+              name: 'Sofiane Abdelrahman',
+              avatar: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=150&h=150&fit=crop&crop=face',
+              createdAt: '2020-09-25T09:30:00Z',
+              updatedAt: '2025-07-28T09:45:00Z',
+              followersCount: 2033,
+              followingCount: 420,
+              postsCount: 123
+            },
+          likes: [
+            { id: 'like-8', userId: 'user-5', postId: 'post-6' },
+            { id: 'like-9', userId: 'user-6', postId: 'post-6' },
+            { id: 'like-10', userId: 'user-8', postId: 'post-6' }
+          ],
+          likesCount: 89,
+          isLikedByCurrentUser: true
+        },
+        {
+          id: 'post-7',
+          content: 'Le backend est le moteur qui fait tourner toutes nos applications préférées.',
+          authorId: 'user-8',
+          createdAt: '2024-07-26T09:20:00Z',
+          updatedAt: '2024-07-26T09:20:00Z',
+          author: {
+            id: 'user-8',
+            email: 'lucas@example.com',
+            username: 'lucas_dev',
+            name: 'Lucas Müller',
+            avatar: 'https://images.unsplash.com/photo-1552374196-c4e7ffc6e126?w=150&h=150&fit=crop&crop=face',
+            createdAt: '2019-04-17T13:00:00Z',
+            updatedAt: '2025-07-26T17:00:00Z',
+            followersCount: 640,
+            followingCount: 98,
+            postsCount: 91
+          },
+          likes: [],
+          likesCount: 0,
+          isLikedByCurrentUser: false
+        },
+        {
+          id: 'post-8',
+          content: 'Les frameworks JS modernes facilitent le développement front-end comme jamais.',
+          authorId: 'user-9',
+          createdAt: '2024-07-27T12:45:00Z',
+          updatedAt: '2024-07-27T12:45:00Z',
+          author: {
+            id: 'user-9',
+            email: 'clara@example.com',
+            username: 'clara_js',
+            name: 'Clara Dupont',
+            avatar: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&h=150&fit=crop&crop=face',
+            createdAt: '2023-01-05T10:15:00Z',
+            updatedAt: '2025-07-25T12:00:00Z',
+            followersCount: 1580,
+            followingCount: 301,
+            postsCount: 65
+          },
+          likes: [
+            { id: 'like-11', userId: 'user-7', postId: 'post-8' }
+          ],
+          likesCount: 15,
+          isLikedByCurrentUser: false
+        },
+        {
+          id: 'post-9',
+          content: 'Node.js est idéal pour construire des API rapides et scalables. À adopter !',
+          authorId: 'user-10',
+          createdAt: '2024-07-28T08:00:00Z',
+          updatedAt: '2024-07-28T08:00:00Z',
+          author: {
+            id: 'user-10',
+            email: 'matt@example.com',
+            username: 'matt_node',
+            name: 'Matt García',
+            avatar: 'https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?w=150&h=150&fit=crop&crop=face',
+            createdAt: '2018-06-20T14:45:00Z',
+            updatedAt: '2025-07-24T18:30:00Z',
+            followersCount: 2109,
+            followingCount: 632,
+            postsCount: 201
+          },
+          likes: [
+            { id: 'like-12', userId: 'user-9', postId: 'post-9' },
+            { id: 'like-13', userId: 'user-4', postId: 'post-9' }
+          ],
+          likesCount: 42,
+          isLikedByCurrentUser: true
+        }];
 
         setPosts(mockPosts);
 
@@ -467,7 +615,7 @@ const MicroblogHomepage = () => {
         </div>
       </div>
 
-      {/* Navigation mobile */}
+      {/*Navigation mobile*/}
       <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-md border-t border-gray-800 lg:hidden">
         <div className="flex justify-around py-3">
           <button className="flex flex-col items-center space-y-1 text-blue-400">
