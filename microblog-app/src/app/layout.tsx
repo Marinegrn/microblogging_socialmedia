@@ -17,6 +17,7 @@ export default function RootLayout({
     <html lang="fr">
       <body className={inter.className}>
         <div className="min-h-screen bg-gray-50">
+          <MobileNav />
           {children}
         </div>
       </body>

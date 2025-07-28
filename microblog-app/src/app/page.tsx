@@ -1,13 +1,11 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import type { User, Post, Like, Follow } from '@shared';
+import Image from 'next/image';
+import type { User, Post, Like, Follow, TrendingTopic } from '@shared';
 import { Heart, MessageCircle, Repeat2, Share, Search, Bell, Mail, Bookmark, User, Home, Hash, MoreHorizontal, Edit3, TrendingUp, Users, Calendar, MapPin, ExternalLink, Verified } from 'lucide-react';
 
 // Types TypeScript basés sur le modèle Prisma
-interface TrendingTopic {
-  hashtag: string;
-  posts: number;
-}
+
 
 const MicroblogHomepage = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -16,13 +14,13 @@ const MicroblogHomepage = () => {
   const [newPostContent, setNewPostContent] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Simulation des données basées sur le modèle Prisma (remplacez par vos appels API)
+  // Simulation des données basées sur le modèle Prisma TODO : appel APIs
   useEffect(() => {
     const fetchData = async () => {
-      // Simuler le chargement des données depuis vos APIs
+      // Simuler le chargement des données depuis API
       // GET /api/auth/me pour l'utilisateur connecté
       // GET /api/posts pour le feed
-      // GET /api/users/suggestions pour les suggestions
+      // BONUS : GET /api/users/suggestions pour les suggestions
       
       setTimeout(() => {
         setCurrentUser({
@@ -262,10 +260,12 @@ const MicroblogHomepage = () => {
             </div>
             {currentUser && (
               <div className="flex items-center space-x-3">
-                <img 
-                  src={currentUser.avatar} 
-                  alt={currentUser.displayName}
-                  className="w-8 h-8 rounded-full"
+                <Image
+                  src={currentUser.avatar || '/default-avatar.png'} // Fallback si avatar est undefined
+                  alt={currentUser.displayName || currentUser.username}
+                  width={32}       // Remplace w-8 (8 * 4px = 32px)
+                  height={32}      // Remplace h-8
+                  className="rounded-full"
                 />
                 <span className="hidden md:block font-medium">{currentUser.displayName}</span>
               </div>
@@ -282,13 +282,19 @@ const MicroblogHomepage = () => {
               {currentUser && (
                 <div className="bg-gray-900/50 rounded-2xl p-6 mb-6 backdrop-blur-sm border border-gray-800">
                   <div className="flex items-center space-x-3 mb-4">
-                    <img src={currentUser.avatar || '/default-avatar.png'} alt={currentUser.name || currentUser.username} className="w-12 h-12 rounded-full" />
-                    <div>
+                    <Image
+                      src={currentUser.avatar || '/default-avatar.png'}
+                      alt={currentUser.name || currentUser.username}
+                      width={48} // w-12 = 12 * 4px = 48px
+                      height={48} // h-12 = 12 * 4px = 48px
+                      className="rounded-full"
+                      />                    
+                      <div>
                       <div className="flex items-center space-x-1">
                         <h3 className="font-bold">{currentUser.name || currentUser.username}</h3>
                       </div>
                       <p className="text-gray-400 text-sm">@{currentUser.username}</p>
-                    </div>
+                      </div>
                   </div>
                   {currentUser.bio && <p className="text-sm mb-4">{currentUser.bio}</p>}
                   <div className="flex space-x-4 text-sm">
@@ -319,7 +325,12 @@ const MicroblogHomepage = () => {
             <div className="bg-gray-900/50 rounded-2xl p-6 mb-6 backdrop-blur-sm border border-gray-800">
               <div className="flex space-x-4">
                 {currentUser && (
-                  <img src={currentUser.avatar || '/default-avatar.png'} alt={currentUser.name || currentUser.username} className="w-12 h-12 rounded-full" />
+                  <Image 
+                  src={currentUser.avatar || '/default-avatar.png'} 
+                  alt={currentUser.name || currentUser.username}
+                  width={48} // w-12 = 12 * 4px = 48px
+                  height={48}
+                  className="w-12 h-12 rounded-full" />
                 )}
                 <div className="flex-1">
                   <textarea
@@ -353,9 +364,11 @@ const MicroblogHomepage = () => {
               {posts.map((post) => (
                 <article key={post.id} className="bg-gray-900/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-800 hover:bg-gray-900/70 transition-colors">
                   <div className="flex space-x-3">
-                    <img 
+                    <Image
                       src={post.author.avatar || '/default-avatar.png'} 
                       alt={post.author.name || post.author.username}
+                      width={48}
+                      height={48}
                       className="w-12 h-12 rounded-full"
                     />
                     <div className="flex-1">
@@ -428,7 +441,12 @@ const MicroblogHomepage = () => {
                   ].map((user, index) => (
                     <div key={index} className="flex items-center justify-between">
                       <div className="flex items-center space-x-3">
-                        <img src={user.avatar} alt={user.name} className="w-10 h-10 rounded-full" />
+                        <Image 
+                        src={user.avatar} 
+                        alt={user.name} 
+                        width={48}
+                        height={48}
+                        className="w-10 h-10 rounded-full" />
                         <div>
                           <div className="flex items-center space-x-1">
                             <p className="font-medium">{user.name}</p>

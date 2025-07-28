@@ -24,6 +24,10 @@ export interface Post {
   likesCount: number;
   isLiked: boolean;
 }
+export interface TrendingTopic {
+  hashtag: string;
+  posts: number;
+}
 
 export interface Like {
   id: string;
